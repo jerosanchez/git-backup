@@ -58,7 +58,7 @@ process_repo() {
 }
 
 for ROOT in "${DIRS[@]}"; do
-    find "$ROOT" -type d -name ".git" 2>/dev/null | while read gitdir; do
+    find "$ROOT" -type d -name ".git" 2>/dev/null | while read -r gitdir; do
         repo=$(dirname "$gitdir")
         process_repo "$repo"
     done

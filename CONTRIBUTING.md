@@ -6,11 +6,12 @@ Thank you for your interest in contributing!
 
 ## Prerequisites
 
-To contribute and check markdown linting, you need:
+To contribute and check code quality, you need:
 
 - Node.js
 - npm (Node.js package manager)
-- markdownlint-cli (Markdown linter)
+- markdownlint-cli (Markdown linter for Markdown files)
+- ShellCheck (linter for shell scripts)
 - GNU Make
 
 ## Installation Steps
@@ -32,7 +33,15 @@ After Node.js and npm are installed, run:
 sudo npm install -g markdownlint-cli
 ```
 
-### 3. Verify Installation
+### 3. Install ShellCheck
+
+To install the shell script linter, run:
+
+```bash
+sudo apt install shellcheck
+```
+
+### 4. Verify Installation
 
 Check that everything is installed:
 
@@ -40,18 +49,24 @@ Check that everything is installed:
 node -v
 npm -v
 markdownlint --version
+shellcheck --version
 make --version
 ```
 
 ## Linting Markdown Files
 
-A `Makefile` is provided with a `lint` target. To check all markdown files for lint issues, run:
+## Linting Files
+
+A `Makefile` is provided with a `lint` target. To check all supported files for lint issues, run:
 
 ```bash
 make lint
 ```
 
-This will use `markdownlint` to check all `.md` files in the project root.
+This will use:
+
+- `markdownlint` to check all Markdown files (`*.md` and `LICENSE`)
+- `shellcheck` to check all shell scripts (`*.sh`)
 
 ## Need Help?
 
