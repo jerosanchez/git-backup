@@ -88,6 +88,18 @@ process_repo() {
     log "INFO" "Processing repo: $repo"
     cd "$repo" || return
 
+
+    # Handle untracked files
+    untracked_files=$(git ls-files --others --exclude-standard)
+    if [[ -n "$untracked_files" ]]; then
+        if [[ ${dry_run:-0} -eq 1 ]]; then
+            log "INFO" "New files would be tracked in $repo:"
+        else
+            log "INFO" "Staging untracked files in $repo..."
+            git add -A
+        fi
+    fi
+
     # Check if there are changes to commit
     if ! git diff --quiet || ! git diff --cached --quiet; then
         commit_and_push "$repo"
