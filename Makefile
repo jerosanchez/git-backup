@@ -21,4 +21,17 @@ install:
 	@echo "See README.md for configuration instructions."
 	@echo "---------------------------------------------------"
 
-.PHONY: lint install
+uninstall:
+	@echo "Uninstalling git-backup from /usr/local/bin..."
+	sudo rm -f /usr/local/bin/git-backup
+	@echo "Removing systemd service..."
+	sudo systemctl disable --now git-backup.service || true
+	sudo rm -f /etc/systemd/system/git-backup.service
+	@echo "Reloading systemd daemon..."
+	sudo systemctl daemon-reload
+	@echo "---------------------------------------------------"
+	@echo "Config files in /etc/git-backup and ~/.config/git-backup are NOT removed."
+	@echo "Manual removal required if you wish to delete configuration."
+	@echo "---------------------------------------------------"
+
+.PHONY: lint install uninstall

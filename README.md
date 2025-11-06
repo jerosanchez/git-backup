@@ -84,6 +84,18 @@ If `/etc/git-backup/directories` exists, it is used. Otherwise, `~/.config/git-b
 
 To change which directories are backed up, simply edit the appropriate config file.
 
+## Uninstallation
+
+To uninstall `git-backup`, run:
+
+```shell
+cd /path/to/git-backup/repo
+make uninstall
+```
+
+This will remove the installed binary and systemd service, but **will not delete your configuration files** in `/etc/git-backup` or `~/.config/git-backup`.  
+If you wish to remove those config files, you must do so manually.
+
 ## Usage
 
 - **Manual run:**
