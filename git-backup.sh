@@ -1,7 +1,25 @@
 #!/bin/bash
 # Backup contents under specific directories to Git repositories
 
-DIRS=("$HOME/Tasks" "$HOME/Notes")
+set -euo pipefail
+
+CONFIG_FILE="/etc/git-backup/directories"
+LOCAL_CONFIG="$HOME/.config/git-backup/directories"
+DIRS=()
+
+if [[ -f "$CONFIG_FILE" ]]; then
+    while IFS= read -r line; do
+        # Skip empty lines and comments
+        [[ -z "$line" || "$line" =~ ^# ]] && continue
+        DIRS+=("$line")
+    done < "$CONFIG_FILE"
+elif [[ -f "$LOCAL_CONFIG" ]]; then
+    while IFS= read -r line; do
+        [[ -z "$line" || "$line" =~ ^# ]] && continue
+        DIRS+=("$line")
+    done < "$LOCAL_CONFIG"
+fi
+
 COMMIT_MSG="backup: $(date '+%Y%m%d%H%M%S')"
 
 echo "Scanning for git repositories under: ${DIRS[*]} ..."
