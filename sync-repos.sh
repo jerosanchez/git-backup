@@ -6,9 +6,9 @@ set -euo pipefail
 # Configuration
 # =========================
 
-CONFIG_FILE="/etc/git-backup/directories"
-LOCAL_CONFIG="${HOME:-/root}/.config/git-backup/directories"
-LOG_FILE="/var/log/git-backup.log"
+CONFIG_FILE="/etc/sync-repos/directories"
+LOCAL_CONFIG="${HOME:-/root}/.config/sync-repos/directories"
+LOG_FILE="/var/log/sync-repos.log"
 COMMIT_MSG="backup: $(date '+%Y%m%d%H%M%S')"
 
 # =========================
@@ -25,10 +25,10 @@ found_repo=0
 
 show_help() {
     cat <<EOF
-git-backup: Automatically commit and push changes in all git repositories under configured directories.
+sync-repos: Automatically commit and push changes in all git repositories under configured directories.
 
 Usage:
-    git-backup.sh [--dry-run] [--show-logs|-l] [--help|-h]
+    sync-repos.sh [--dry-run] [--show-logs|-l] [--help|-h]
 
 Options:
     --dry-run,-t   Preview actions without making changes.
@@ -36,7 +36,7 @@ Options:
     --help, -h     Show this help message and exit.
 
 Configuration:
-    Directories to scan are listed in /etc/git-backup/directories or ~/.config/git-backup/directories.
+    Directories to scan are listed in /etc/sync-repos/directories or ~/.config/sync-repos/directories.
     See README.md for details.
 EOF
 }
@@ -46,7 +46,7 @@ log() {
     local timestamp program level message
     
     timestamp="$(date '+%Y-%m-%dT%H:%M:%S%z')"
-    program="git-backup"
+    program="sync-repos"
     level="${1:-INFO}"
     message="$2"
 

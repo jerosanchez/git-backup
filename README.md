@@ -1,13 +1,13 @@
 <!-- markdownlint-disable MD041 -->
 <!-- GitHub Actions Badges -->
-[![Lint](https://github.com/jerosanchez/git-backup/actions/workflows/lint.yml/badge.svg)](https://github.com/jerosanchez/git-backup/actions/workflows/lint.yml)
+[![Lint](https://github.com/jerosanchez/sync-repos/actions/workflows/lint.yml/badge.svg)](https://github.com/jerosanchez/sync-repos/actions/workflows/lint.yml)
 [![Beta](https://img.shields.io/badge/status-beta-orange)](https://shields.io/)
 
 > **⚠️ This project is in beta and not suited for production use. Features and behavior may change. Use at your own risk.**
 
 # README
 
-`git-backup` is a utility to automatically commit and push changes in all git repositories found under specified directories. It can be run manually or automatically before system shutdown using a `systemd` service.
+`sync-repos` is a utility to automatically commit and push changes in all git repositories found under specified directories. It can be run manually or automatically before system shutdown using a `systemd` service.
 
 This tool is especially useful for automating backups of personal knowledge bases and project folders. For example, you can use it to keep your [Obsidian](https://obsidian.md/) vaults safely versioned and synced to remote repositories, back up notes, task lists, or code projects stored in git. It is also handy for ensuring that any changes in your documentation, research, or configuration folders are regularly committed and pushed without manual intervention.
 
@@ -18,7 +18,7 @@ This tool is especially useful for automating backups of personal knowledge base
 - Commits any pending changes with a timestamped message
 - Pushes local commits to remote
 - Supports a dry-run mode to preview actions
-- Logs all actions to `/var/log/git-backup.log` for easy review
+- Logs all actions to `/var/log/sync-repos.log` for easy review
 
 ## Installation
 
@@ -27,26 +27,25 @@ This tool is especially useful for automating backups of personal knowledge base
 2. **Run the install command:**
 
     ```shell
-    cd git-backup
+    cd sync-repos
     make install
     ```
 
     This will:
-
-    - Copy `git-backup.sh` to `/usr/local/bin/git-backup` (without the `.sh` extension)
-    - Install the `git-backup.service` systemd unit to `/etc/systemd/system/git-backup.service`
+    - Copy `sync-repos.sh` to `/usr/local/bin/sync-repos` (without the `.sh` extension)
+    - Install the `sync-repos.service` systemd unit to `/etc/systemd/system/sync-repos.service`
     - Reload systemd and enable the service
 
 3. **Review or edit the directories to be backed up:**
 
-    - Create `/etc/git-backup/directories` or `~/.config/git-backup/directories` as described below.
+- Create `/etc/sync-repos/directories` or `~/.config/sync-repos/directories` as described below.
 
 ## Configuration
 
-`git-backup` supports specifying which directories to scan for git repositories using configuration files:
+`sync-repos` supports specifying which directories to scan for git repositories using configuration files:
 
-- **Global config:** `/etc/git-backup/directories`
-- **User config:** `~/.config/git-backup/directories`
+- **Global config:** `/etc/sync-repos/directories`
+- **User config:** `~/.config/sync-repos/directories`
 
 The script will use the global config if present, otherwise the user config. If neither exists, no git repository will be comitted and/or pushed automatically.
 
@@ -57,8 +56,8 @@ The script will use the global config if present, otherwise the user config. If 
     Create the file using your editor, for example:
 
     ```shell
-    sudo mkdir -p /etc/git-backup
-    sudo nano /etc/git-backup/directories
+    sudo mkdir -p /etc/sync-repos
+    sudo nano /etc/sync-repos/directories
     ```
 
 2. For per-user configuration:
@@ -66,8 +65,8 @@ The script will use the global config if present, otherwise the user config. If 
     Create the file using your editor, for example:
 
     ```shell
-    mkdir -p ~/.config/git-backup
-    nano ~/.config/git-backup/directories
+    mkdir -p ~/.config/sync-repos
+    nano ~/.config/sync-repos/directories
     ```
 
 Then add lines like:
@@ -79,26 +78,23 @@ Then add lines like:
 /home/youruser/Projects
 ```
 
-- Lines starting with `#` are treated as comments.
-- Blank lines are ignored.
-
 **Config file priority:**
 
-If `/etc/git-backup/directories` exists, it will be used. Otherwise, the script will use `~/.config/git-backup/directories` if present.  
+If `/etc/sync-repos/directories` exists, it will be used. Otherwise, the script will use `~/.config/sync-repos/directories` if present.  
 If neither configuration file exists, the script will exit successfully without committing or pushing any repositories.
 
 To change which directories are backed up, simply edit the appropriate config file.
 
 ## Uninstallation
 
-To uninstall `git-backup`, run:
+To uninstall `sync-repos`, run:
 
 ```shell
 cd /path/to/git-backup/repo
 make uninstall
 ```
 
-This will remove the installed binary and systemd service, but **will not delete your configuration files** in `/etc/git-backup` or `~/.config/git-backup`.  
+This will remove the installed binary and systemd service, but **will not delete your configuration files** in `/etc/sync-repos` or `~/.config/sync-repos`.  
 If you wish to remove those config files, you must do so manually.
 
 ## Usage
@@ -106,11 +102,11 @@ If you wish to remove those config files, you must do so manually.
 - **Manual run:**
 
   ```shell
-  /usr/local/bin/git-backup
+  /usr/local/bin/sync-repos
   ```
 
   - Add `--dry-run` to preview actions without making changes.
-  - Manual runs will use `/etc/git-backup/directories` if present, otherwise `~/.config/git-backup/directories`.
+  - Manual runs will use `/etc/sync-repos/directories` if present, otherwise `~/.config/sync-repos/directories`.
 
 - **Automatic run before shutdown (systemd service):**
 
@@ -122,24 +118,24 @@ If you wish to remove those config files, you must do so manually.
 
 ## Logs
 
-The output from the backup script is redirected to `/var/log/git-backup.log` by the systemd service.
+The output from the backup script is redirected to `/var/log/sync-repos.log` by the systemd service.
 
 To view recent logs:
 
 ```shell
-tail -n 50 /var/log/git-backup.log
+sync-repos --show-logs
 ```
 
 To filter logs related to this tool:
 
 ```shell
-grep 'git-backup' /var/log/git-backup.log
+grep 'sync-repos' /var/log/sync-repos.log
 ```
 
 You can also use `less` or other tools for easier navigation:
 
 ```shell
-less /var/log/git-backup.log
+less /var/log/sync-repos.log
 ```
 
 ## Contributing

@@ -1,4 +1,4 @@
-# Contributing to git-backup
+# Contributing to sync-repos
 
 Thank you for your interest in contributing!
 
@@ -90,7 +90,7 @@ Please follow these common practices when contributing to this project:
 - **Discussions:**  
   - Use issues or PR comments for questions, suggestions, or feedback.
 
-Thank you for helping improve git-backup!
+Thank you for helping improve sync-repos!
 
 ## Need Help?
 
