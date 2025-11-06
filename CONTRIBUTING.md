@@ -53,8 +53,6 @@ shellcheck --version
 make --version
 ```
 
-## Linting Markdown Files
-
 ## Linting Files
 
 A `Makefile` is provided with a `lint` target. To check all supported files for lint issues, run:
@@ -67,6 +65,32 @@ This will use:
 
 - `markdownlint` to check all Markdown files (`*.md` and `LICENSE`)
 - `shellcheck` to check all shell scripts (`*.sh`)
+
+## Contributing Guidelines
+
+Please follow these common practices when contributing to this project:
+
+- **Issues:**  
+  - Search existing issues before opening a new one to avoid duplicates.
+  - Provide a clear and descriptive title and summary.
+  - Include steps to reproduce, expected behavior, and relevant environment details.
+
+- **Pull Requests:**  
+  - Fork the repository and create your branch from `main`.
+  - Write clear, concise commit messages.
+  - Ensure your code passes all linting and tests before submitting (see above).
+  - Reference related issues in your PR description (e.g., "Fixes #123").
+  - Keep PRs focused and minimal—avoid mixing unrelated changes.
+  - Be responsive to review feedback and update your PR as needed.
+
+- **Code Style:**  
+  - Follow the guidelines in [AGENTS.md](AGENTS.md) for markdown, bash scripts, and Makefiles.
+  - Add comments where helpful for maintainability.
+
+- **Discussions:**  
+  - Use issues or PR comments for questions, suggestions, or feedback.
+
+Thank you for helping improve git-backup!
 
 ## Need Help?
 
