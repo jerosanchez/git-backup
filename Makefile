@@ -16,6 +16,9 @@ install:
 	sudo systemctl daemon-reload
 	@echo "Enabling git-backup service..."
 	sudo systemctl enable git-backup.service
+	@echo "Creating log file /var/log/git-backup.log if it does not exist..."
+	sudo touch /var/log/git-backup.log
+	sudo chmod 644 /var/log/git-backup.log
 	@echo "---------------------------------------------------"
 	@echo "Remember to create /etc/git-backup/directories or ~/.config/git-backup/directories!"
 	@echo "See README.md for configuration instructions."
