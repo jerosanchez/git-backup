@@ -7,7 +7,7 @@ set -euo pipefail
 # =========================
 
 CONFIG_FILE="/etc/git-backup/directories"
-LOCAL_CONFIG="$HOME/.config/git-backup/directories"
+LOCAL_CONFIG="${HOME:-/root}/.config/git-backup/directories"
 LOG_FILE="/var/log/git-backup.log"
 COMMIT_MSG="backup: $(date '+%Y%m%d%H%M%S')"
 
@@ -28,11 +28,12 @@ show_help() {
 git-backup: Automatically commit and push changes in all git repositories under configured directories.
 
 Usage:
-    git-backup.sh [--dry-run] [--help|-h]
+    git-backup.sh [--dry-run] [--show-logs|-l] [--help|-h]
 
 Options:
-    --dry-run   Preview actions without making changes.
-    --help, -h  Show this help message and exit.
+    --dry-run,-t   Preview actions without making changes.
+    --show-logs,-l Show the last 50 lines of the log file.
+    --help, -h     Show this help message and exit.
 
 Configuration:
     Directories to scan are listed in /etc/git-backup/directories or ~/.config/git-backup/directories.
@@ -110,8 +111,18 @@ if [[ "${1:-}" == "--help" || "${1:-}" == "-h" ]]; then
     exit 0
 fi
 
+# Show logs if requested and exit
+if [[ "${1:-}" == "--show-logs" || "${1:-}" == "-l" ]]; then
+    if [[ -f $LOG_FILE ]]; then
+        tail -n 50 $LOG_FILE
+    else
+        echo "Log file $LOG_FILE not found."
+    fi
+    exit 0
+fi
+
 # Enabled dry-run mode if specified
-if [[ "${1:-}" == "--dry-run" ]]; then
+if [[ "${1:-}" == "--dry-run" || "${1:-}" == "-t" ]]; then
     dry_run=1
     log_git_backup "INFO" "Dry run mode: No changes will be made."
 fi
