@@ -1,0 +1,12 @@
+[Unit]
+Description=Auto push all git repos before shutdown
+DefaultDependencies=no
+Before=shutdown.target reboot.target halt.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/git-backup.sh | sed 's/^/[git-backup] /' >> /var/log/git-backup.log 2>&1
+TimeoutStartSec=5min
+
+[Install]
+WantedBy=halt.target reboot.target shutdown.target
