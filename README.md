@@ -1,11 +1,12 @@
 <!-- markdownlint-disable MD041 -->
 <!-- GitHub Actions Badges -->
 [![Lint](https://github.com/jerosanchez/git-backup/actions/workflows/lint.yml/badge.svg)](https://github.com/jerosanchez/git-backup/actions/workflows/lint.yml)
-[![Release](https://github.com/jerosanchez/git-backup/actions/workflows/release.yml/badge.svg)](https://github.com/jerosanchez/git-backup/actions/workflows/release.yml)
 
 # README
 
 `git-backup` is a utility to automatically commit and push changes in all git repositories found under specified directories. It can be run manually or automatically before system shutdown using a `systemd` service.
+
+This tool is especially useful for automating backups of personal knowledge bases and project folders. For example, you can use it to keep your [Obsidian](https://obsidian.md/) vaults safely versioned and synced to remote repositories, back up notes, task lists, or code projects stored in git. It is also handy for ensuring that any changes in your documentation, research, or configuration folders are regularly committed and pushed without manual intervention.
 
 ## Features
 
