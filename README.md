@@ -37,9 +37,9 @@ This tool is especially useful for automating backups of personal knowledge base
     - Install the `git-backup.service` systemd unit to `/etc/systemd/system/git-backup.service`
     - Reload systemd and enable the service
 
-3. **(Optional) Review or edit the directories to be backed up:**
+3. **Review or edit the directories to be backed up:**
 
-    - Create or edit `/etc/git-backup/directories` or `~/.config/git-backup/directories` as described below.
+    - Create `/etc/git-backup/directories` or `~/.config/git-backup/directories` as described below.
 
 ## Configuration
 
@@ -48,7 +48,7 @@ This tool is especially useful for automating backups of personal knowledge base
 - **Global config:** `/etc/git-backup/directories`
 - **User config:** `~/.config/git-backup/directories`
 
-The script will use the global config if present, otherwise the user config. If neither exists, it does nothing.
+The script will use the global config if present, otherwise the user config. If neither exists, no git repository will be comitted and/or pushed automatically.
 
 **To create a config file:**
 
@@ -84,7 +84,8 @@ Then add lines like:
 
 **Config file priority:**
 
-If `/etc/git-backup/directories` exists, it is used. Otherwise, `~/.config/git-backup/directories` is used. If neither exists, the script finish successfully without doing anything.
+If `/etc/git-backup/directories` exists, it will be used. Otherwise, the script will use `~/.config/git-backup/directories` if present.  
+If neither configuration file exists, the script will exit successfully without committing or pushing any repositories.
 
 To change which directories are backed up, simply edit the appropriate config file.
 
