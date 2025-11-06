@@ -1,7 +1,36 @@
 #!/bin/bash
-# Backup contents under specific directories to Git repositories
 
 set -euo pipefail
+
+# =========================
+# Help Section
+# =========================
+
+show_help() {
+    cat <<EOF
+git-backup: Automatically commit and push changes in all git repositories under configured directories.
+
+Usage:
+    git-backup.sh [--dry-run] [--help|-h]
+
+Options:
+    --dry-run   Preview actions without making changes.
+    --help, -h  Show this help message and exit.
+
+Configuration:
+    Directories to scan are listed in /etc/git-backup/directories or ~/.config/git-backup/directories.
+    See README.md for details.
+EOF
+}
+
+if [[ "${1:-}" == "--help" || "${1:-}" == "-h" ]]; then
+    show_help
+    exit 0
+fi
+
+# =========================
+# Config File Selection
+# =========================
 
 CONFIG_FILE="/etc/git-backup/directories"
 LOCAL_CONFIG="$HOME/.config/git-backup/directories"
@@ -26,6 +55,10 @@ if [[ ${#DIRS[@]} -eq 0 ]]; then
     echo "See README.md for configuration instructions."
     exit 0
 fi
+
+# =========================
+# Main Program
+# =========================
 
 COMMIT_MSG="backup: $(date '+%Y%m%d%H%M%S')"
 
