@@ -5,9 +5,11 @@ Before=shutdown.target reboot.target halt.target
 
 [Service]
 Type=oneshot
-ExecStart=/usr/local/bin/git-backup
-StandardOutput=append:/var/log/git-backup.log
-StandardError=append:/var/log/git-backup.log
+User=%SYNC_REPOS_USER%
+Group=%SYNC_REPOS_GROUP%
+ExecStart=/usr/local/bin/sync-repos
+StandardOutput=append:/var/log/sync-repos.log
+StandardError=append:/var/log/sync-repos.log
 TimeoutStartSec=5min
 
 [Install]
