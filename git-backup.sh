@@ -32,7 +32,7 @@ COMMIT_MSG="backup: $(date '+%Y%m%d%H%M%S')"
 echo "Scanning for git repositories under: ${DIRS[*]} ..."
 
 DRY_RUN=0
-if [[ "$1" == "--dry-run" ]]; then
+if [[ "${1:-}" == "--dry-run" ]]; then
     DRY_RUN=1
     echo "🟡 Dry run mode: No changes will be made."
 fi
