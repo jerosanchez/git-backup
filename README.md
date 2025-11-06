@@ -1,10 +1,16 @@
-# git-backup
+<!-- markdownlint-disable MD041 -->
+<!-- GitHub Actions Badges -->
+[![Lint](https://github.com/jerosanchez/git-backup/actions/workflows/lint.yml/badge.svg)](https://github.com/jerosanchez/git-backup/actions/workflows/lint.yml)
+[![Release](https://github.com/jerosanchez/git-backup/actions/workflows/release.yml/badge.svg)](https://github.com/jerosanchez/git-backup/actions/workflows/release.yml)
 
-`git-backup` is a utility to automatically commit and push changes in all git repositories found under specified directories (by default: `$HOME/Tasks` and `$HOME/Notes`). It can be run manually or automatically before system shutdown using a `systemd` service.
+# README
+
+`git-backup` is a utility to automatically commit and push changes in all git repositories found under specified directories. It can be run manually or automatically before system shutdown using a `systemd` service.
 
 ## Features
 
 - Scans specified folders for git repositories
+- Flexible configuration via global and user config files
 - Commits any pending changes with a timestamped message
 - Pushes local commits to remote
 - Supports a dry-run mode to preview actions
