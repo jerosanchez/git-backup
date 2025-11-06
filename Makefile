@@ -1,6 +1,6 @@
-MD_FILES := $(wildcard *.md)
+MD_FILES := $(wildcard *.md) LICENSE
 
 lint:
-	markdownlint $(MD_FILES)
+	@markdownlint $(MD_FILES)
 
 .PHONY: lint
