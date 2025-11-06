@@ -22,11 +22,13 @@
     ```
 
     This will:
+
     - Copy `git-backup.sh` to `/usr/local/bin/git-backup` (without the `.sh` extension)
     - Install the `git-backup.service` systemd unit to `/etc/systemd/system/git-backup.service`
     - Reload systemd and enable the service
 
 3. **(Optional) Review or edit the directories to be backed up:**
+
     - Create or edit `/etc/git-backup/directories` or `~/.config/git-backup/directories` as described below.
 
 ## Configuration
@@ -42,32 +44,36 @@ The script will use the global config if present, otherwise the user config. If 
 
 1. For system-wide configuration (all users):
 
+    Create the file using your editor, for example:
+
     ```shell
     sudo mkdir -p /etc/git-backup
-    sudo tee /etc/git-backup/directories <<EOF
-    # List directories to scan for git repositories
-    /home/youruser/Tasks
-    /home/youruser/Notes
-    /home/youruser/Projects
-    EOF
+    sudo nano /etc/git-backup/directories
     ```
 
 2. For per-user configuration:
 
+    Create the file using your editor, for example:
+
     ```shell
     mkdir -p ~/.config/git-backup
-    tee ~/.config/git-backup/directories <<EOF
-    # List directories to scan for git repositories
-    $HOME/Tasks
-    $HOME/Notes
-    $HOME/PersonalWiki
-    EOF
+    nano ~/.config/git-backup/directories
     ```
+
+Then add lines like:
+
+```text
+# List directories to scan for git repositories
+/home/youruser/Tasks
+/home/youruser/Notes
+/home/youruser/Projects
+```
 
 - Lines starting with `#` are treated as comments.
 - Blank lines are ignored.
 
-**Config file priority:**  
+**Config file priority:**
+
 If `/etc/git-backup/directories` exists, it is used. Otherwise, `~/.config/git-backup/directories` is used. If neither exists, the script finish successfully without doing anything.
 
 To change which directories are backed up, simply edit the appropriate config file.
@@ -84,6 +90,7 @@ To change which directories are backed up, simply edit the appropriate config fi
   - Manual runs will use `/etc/git-backup/directories` if present, otherwise `~/.config/git-backup/directories`.
 
 - **Automatic run before shutdown (systemd service):**
+
   The systemd service will run the backup script before shutdown, reboot, or halt.
 
   > **Note:**  
