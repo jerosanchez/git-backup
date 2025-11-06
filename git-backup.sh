@@ -41,8 +41,8 @@ Configuration:
 EOF
 }
 
-log_git_backup() {
-    # Usage: log_git_backup "LEVEL" "message"
+log() {
+    # Usage: log "LEVEL" "message"
     local timestamp program level message
     
     timestamp="$(date '+%Y-%m-%dT%H:%M:%S%z')"
@@ -63,29 +63,29 @@ log_git_backup() {
 commit_and_push() {
     local repo="$1"
     if [[ $dry_run -eq 1 ]]; then
-        log_git_backup "INFO" "Would commit and push: $repo"
+        log "INFO" "Would commit and push: $repo"
     else
-        log_git_backup "INFO" "Committing changes in $repo..."
+        log "INFO" "Committing changes in $repo..."
         git add -A
         git commit -m "$COMMIT_MSG"
-        log_git_backup "INFO" "Pushing changes in $repo..."
-        git push || log_git_backup "ERROR" "Failed to push $repo"
+        log "INFO" "Pushing changes in $repo..."
+        git push || log "ERROR" "Failed to push $repo"
     fi
 }
 
 push_unpushed_commits() {
     local repo="$1"
     if [[ $dry_run -eq 1 ]]; then
-        log_git_backup "INFO" "Would push unpushed commits: $repo"
+        log "INFO" "Would push unpushed commits: $repo"
     else
-        log_git_backup "INFO" "Pushing unpushed commits in $repo..."
-        git push || log_git_backup "ERROR" "Failed to push $repo"
+        log "INFO" "Pushing unpushed commits in $repo..."
+        git push || log "ERROR" "Failed to push $repo"
     fi
 }
 
 process_repo() {
     local repo="$1"
-    log_git_backup "INFO" "Processing repo: $repo"
+    log "INFO" "Processing repo: $repo"
     cd "$repo" || return
 
     # Check if there are changes to commit
@@ -96,8 +96,55 @@ process_repo() {
         if git status -uno | grep -q "Your branch is ahead"; then
             push_unpushed_commits "$repo"
         else
-            log_git_backup "INFO" "No changes to commit or push in $repo"
+            log "INFO" "No changes to commit or push in $repo"
         fi
+    fi
+}
+
+show_logs() {
+    if [[ -f $LOG_FILE ]]; then
+        tail -n 50 "$LOG_FILE"
+    else
+        echo "Log file $LOG_FILE not found."
+    fi
+}
+
+enable_dry_run() {
+    dry_run=1
+    log "INFO" "Dry run mode: No changes will be made."
+}
+
+load_directories() {
+    dirs=()
+    if [[ -f "$CONFIG_FILE" ]]; then
+        while IFS= read -r line; do
+            [[ -z "$line" || "$line" =~ ^# ]] && continue
+            dirs+=("$line")
+        done < "$CONFIG_FILE"
+    elif [[ -f "$LOCAL_CONFIG" ]]; then
+        while IFS= read -r line; do
+            [[ -z "$line" || "$line" =~ ^# ]] && continue
+            dirs+=("$line")
+        done < "$LOCAL_CONFIG"
+    fi
+}
+
+process_directories() {
+    found_repo=0
+    for root in "${dirs[@]}"; do
+        while read -r gitdir; do
+            repo=$(dirname "$gitdir")
+            found_repo=1
+            process_repo "$repo"
+        done < <(find "$root" -type d -name ".git" 2>/dev/null)
+    done
+}
+
+print_result() {
+    if [[ $found_repo -eq 0 ]]; then
+        log "WARNING" "No repositories found under configured directories, nothing to do."
+    else
+        log "INFO" "All repositories processed."
     fi
 }
 
@@ -105,59 +152,34 @@ process_repo() {
 # Main Program
 # =========================
 
-# Show help if requested and exit
-if [[ "${1:-}" == "--help" || "${1:-}" == "-h" ]]; then
-    show_help
-    exit 0
-fi
-
-# Show logs if requested and exit
-if [[ "${1:-}" == "--show-logs" || "${1:-}" == "-l" ]]; then
-    if [[ -f $LOG_FILE ]]; then
-        tail -n 50 $LOG_FILE
-    else
-        echo "Log file $LOG_FILE not found."
+main() {
+    # Show help if requested and exit
+    if [[ "${1:-}" == "--help" || "${1:-}" == "-h" ]]; then
+        show_help
+        exit 0
     fi
-    exit 0
-fi
 
-# Enabled dry-run mode if specified
-if [[ "${1:-}" == "--dry-run" || "${1:-}" == "-t" ]]; then
-    dry_run=1
-    log_git_backup "INFO" "Dry run mode: No changes will be made."
-fi
+    # Show logs if requested and exit
+    if [[ "${1:-}" == "--show-logs" || "${1:-}" == "-l" ]]; then
+        show_logs
+        exit 0
+    fi
 
-# Load directories from config files
-if [[ -f "$CONFIG_FILE" ]]; then
-    while IFS= read -r line; do
-        # Skip empty lines and comments
-        [[ -z "$line" || "$line" =~ ^# ]] && continue
-        dirs+=("$line")
-    done < "$CONFIG_FILE"
-elif [[ -f "$LOCAL_CONFIG" ]]; then
-    while IFS= read -r line; do
-        [[ -z "$line" || "$line" =~ ^# ]] && continue
-        dirs+=("$line")
-    done < "$LOCAL_CONFIG"
-fi
+    # Enable dry-run mode if specified
+    if [[ "${1:-}" == "--dry-run" || "${1:-}" == "-t" ]]; then
+        enable_dry_run
+    fi
 
-if [[ ${#dirs[@]} -eq 0 ]]; then
-    log_git_backup "WARNING" "No config file found, nothing to do."
-    exit 0
-fi
+    load_directories
 
-# Process each directory
-for root in "${dirs[@]}"; do
-    while read -r gitdir; do
-        repo=$(dirname "$gitdir")
-        found_repo=1
-        process_repo "$repo"
-    done < <(find "$root" -type d -name ".git" 2>/dev/null)
-done
+    # Exit if no directories are configured
+    if [[ ${#dirs[@]} -eq 0 ]]; then
+        log "WARNING" "No config file found, nothing to do."
+        exit 0
+    fi
 
-# Display final status
-if [[ $found_repo -eq 0 ]]; then
-    log_git_backup "WARNING" "No repositories found under configured directories, nothing to do."
-else
-    log_git_backup "INFO" "All repositories processed."
-fi
+    process_directories
+    print_result
+}
+
+main "$@"
