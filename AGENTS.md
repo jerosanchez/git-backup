@@ -6,7 +6,7 @@ To ensure that AI-generated markdown content passes linting checks, follow these
 
 - Surround lists with blank lines.
 - Add blank lines before and after headings.
-- Do not exceed 80 characters per line unless necessary (line length is ignored, but keep lines readable).
+- Do not break paragraphs in lines (line length is ignored by the linter).
 - Use proper indentation for nested lists and code blocks.
 - Use fenced code blocks (triple backticks) for code snippets.
 - Avoid trailing spaces at the end of lines.

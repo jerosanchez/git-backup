@@ -63,3 +63,9 @@ You can also use `less` or other tools for easier navigation:
 ```shell
 less /var/log/git-backup.log
 ```
+
+## Contributing
+
+If you'd like to contribute, please read CONTRIBUTING.md for guidelines on reporting issues, submitting patches, coding style, and testing.
+
+See: [CONTRIBUTING.md](CONTRIBUTING.md)
