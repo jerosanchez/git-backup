@@ -14,20 +14,20 @@
 
 1. **Clone or copy the repository to your system.**
 
-2. **Run the install script:**
+2. **Run the install command:**
 
-   ```shell
-   cd $HOME/Developer/utils/git-backup
-   ./install.sh
-   ```
+    ```shell
+    cd git-backup
+    make install
+    ```
 
-   This will:
-   - Copy `git-backup.sh` to `/usr/local/bin/git-backup.sh`
-   - Install the `git-backup.service` systemd unit to `/etc/systemd/system/git-backup.service`
-   - Reload systemd and enable the service
+    This will:
+    - Copy `git-backup.sh` to `/usr/local/bin/git-backup` (without the `.sh` extension)
+    - Install the `git-backup.service` systemd unit to `/etc/systemd/system/git-backup.service`
+    - Reload systemd and enable the service
 
 3. **(Optional) Review or edit the directories to be backed up:**
-   - Edit `git-backup.sh` and modify the `DIRS` array as needed.
+    - Create or edit `/etc/git-backup/directories` or `~/.config/git-backup/directories` as described below.
 
 ## Configuration
 
@@ -77,7 +77,7 @@ To change which directories are backed up, simply edit the appropriate config fi
 - **Manual run:**
 
   ```shell
-  /usr/local/bin/git-backup.sh
+  /usr/local/bin/git-backup
   ```
 
   - Add `--dry-run` to preview actions without making changes.

@@ -20,6 +20,13 @@ elif [[ -f "$LOCAL_CONFIG" ]]; then
     done < "$LOCAL_CONFIG"
 fi
 
+if [[ ${#DIRS[@]} -eq 0 ]]; then
+    echo "No config file found at /etc/git-backup/directories or ~/.config/git-backup/directories."
+    echo "Please create one of these files and list directories to back up."
+    echo "See README.md for configuration instructions."
+    exit 0
+fi
+
 COMMIT_MSG="backup: $(date '+%Y%m%d%H%M%S')"
 
 echo "Scanning for git repositories under: ${DIRS[*]} ..."

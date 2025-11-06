@@ -5,7 +5,7 @@ Before=shutdown.target reboot.target halt.target
 
 [Service]
 Type=oneshot
-ExecStart=/usr/local/bin/git-backup.sh | sed 's/^/[git-backup] /' >> /var/log/git-backup.log 2>&1
+ExecStart=/usr/local/bin/git-backup | sed 's/^/[git-backup] /' >> /var/log/git-backup.log 2>&1
 TimeoutStartSec=5min
 
 [Install]
